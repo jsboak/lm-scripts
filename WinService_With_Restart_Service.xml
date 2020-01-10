@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1578523510</version>
+        <name>WinService_With_Restart_Service</name>
+        <displayedas>Services With Auto Restart</displayedas>
+        <description>Monitors state of Windows Services. Auto-restarts if service is detected down.</description>
+        <collector>wmi</collector>
+        <hasMultiInstances>true</hasMultiInstances>
+        <schedule>180</schedule>
+        <appliesTo>/*
+system.displayname == &#34;SD-AZ-Server1&#34; || system.displayname == &#34;se-la3-manage1&#34;
+*/</appliesTo>
+        <wildcardauto>false</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript></wildcardlinuxscript>
+        <wildcardlinuxcmdline></wildcardlinuxcmdline>
+        <wildcardwinscript></wildcardwinscript>
+        <wildcardwincmdline></wildcardwincmdline>
+        <wildcardgroovyscript></wildcardgroovyscript>
+        <wildcardschedule>1440</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>false</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group></group>
+        <tags>os,windows</tags>
+        <technology>Collector service-account or wmi.user needs permissions to &#34;start&#34; services.</technology>
+        <adlist><![CDATA[{"agdmethod":"none","agdparams":"","id":0,"filters":[],"params":{}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+        <dataSourceType>1</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>ip</name>
+            <value>dns</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>wmiNamespace</name>
+            <value>CIMV2</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>type</name>
+            <value>query</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryClass</name>
+            <value>Win32_Service</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryIndex</name>
+            <value>displayname</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryValue</name>
+            <value>##WILDVALUE##</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>methodName</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>targetPath</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>methodInputs</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>State</name>
+            <dataType>1</dataType>
+            <type>5</type>
+            <postprocessormethod>textmatch</postprocessormethod>
+            <postprocessorparam>Running</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>!= 1</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>The Windows service ##INSTANCE## ##DSIDESCRIPTION## on ##HOST## is not running.
+This started at ##START## - or ##DURATION## ago.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>State</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>1</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Status</name>
+            <dataType>1</dataType>
+            <type>5</type>
+            <postprocessormethod>textmatch</postprocessormethod>
+            <postprocessorparam>OK</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>Status</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>3</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Restart_Service</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>groovy</postprocessormethod>
+            <postprocessorparam>hostname = hostProps.get(&#34;system.ips&#34;).split(&#34;,&#34;)[0]
+status = output[&#34;STATUS&#34;]
+state = output[&#34;STATE&#34;]
+service_name = output[&#34;NAME&#34;]
+
+String[] start_service = [&#34;cmd.exe&#34;, &#34;/c&#34;, &#34;sc&#34;, &#34;\\\\${hostname}&#34;, &#34;start&#34;, &#34;${service_name}&#34;];
+
+String[] check_status = [&#34;cmd.exe&#34;, &#34;/c&#34;, &#34;sc&#34;, &#34;\\\\${hostname}&#34;, &#34;query&#34;, &#34;${service_name}&#34;];
+
+if( status == &#34;OK&#34; &#38;&#38; state == &#34;Running&#34;) {
+    
+    return 1
+    
+} else {
+    
+    status = process_builder(check_status)
+    
+    if ( !status.contains(&#34;RUNNING&#34;) ) {
+        
+        service_restart = process_builder(start_service)
+
+        sleep(5000)
+        
+        recheck_status = process_builder(check_status)
+        
+        if( recheck_status.contains(&#34;RUNNING&#34;)) {
+            
+            Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec(&#34;taskkill /F /IM cmd.exe&#34;);
+            
+            return 2
+            
+        } else {
+            
+            return 3
+        }
+    }
+}
+
+def process_builder(command) {
+    Process process = new ProcessBuilder(command).start();
+    InputStream inputStream = process.getInputStream();
+    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+    String output = bufferedReader.readLines();
+    return output
+}
+
+</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>1=Running, 2=Restarted, 3=Restart-Failed</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>RunningStatus</name>
+            <dataType>1</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>if(eq(State,1),Status,1)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>!= 1</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>The windows service ##INSTANCE## ##DSIDESCRIPTION## on ##HOST## is running, but not in the OK state.
+It may be in error, degraded or starting/stoppingstate.
+This started at ##START## - or ##DURATION## ago.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>If service is running, alert if Status is not OK.</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1>RunningStatus</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>3</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        <graph>
+            <name>Restart Status</name>
+            <title>Restart Status</title>
+            <verticallabel>1=Running, 2=Restarted, 3=Failed Restart</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1hour</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Restart_Service</name>
+            <datapointname>Restart_Service</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Restart Service</legend>
+                <color>silver</color>
+                <datapointname>Restart_Service</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>State</name>
+            <title>State</title>
+            <verticallabel>State</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>5.0</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1hour</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>State</name>
+            <datapointname>State</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>State 1 = Running</legend>
+                <color>blue</color>
+                <datapointname>State</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Status</name>
+            <title>Status</title>
+            <verticallabel>Status</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>5.0</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1hour</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Status</name>
+            <datapointname>Status</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Status 1 = OK</legend>
+                <color>blue</color>
+                <datapointname>Status</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        </graphs>
+        <overviewgraphs>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>

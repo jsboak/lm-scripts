@@ -1,0 +1,1179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1578517724</version>
+        <name>Docker_Containers_cAdvisor20_with_restart</name>
+        <displayedas>Docker Containers with Auto Restart</displayedas>
+        <description>Monitors Docker containers via cAdvisor using the 2.0 API
+https://github.com/google/cadvisor</description>
+        <collector>webpage</collector>
+        <hasMultiInstances>true</hasMultiInstances>
+        <schedule>180</schedule>
+        <appliesTo>isLinux()</appliesTo>
+        <wildcardauto>true</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript>ad_http</wildcardlinuxscript>
+        <wildcardlinuxcmdline> uri=&#34;http://##HOSTNAME##:8080/api/v2.0/spec?type=docker&#38;recursive=true&#34; ports=&#34;&#34; regex=&#34;aliases\&#34;:.\&#34;(.*?)\&#34;&#34;  ssl=&#34;no&#34; caseSensitive=&#34;no&#34; followRedirect=&#34;no&#34; </wildcardlinuxcmdline>
+        <wildcardwinscript>ad_http</wildcardwinscript>
+        <wildcardwincmdline> uri=&#34;http://##HOSTNAME##:8080/api/v2.0/spec?type=docker&#38;recursive=true&#34; ports=&#34;&#34; regex=&#34;aliases\&#34;:.\&#34;(.*?)\&#34;&#34;  ssl=&#34;no&#34; caseSensitive=&#34;no&#34; followRedirect=&#34;no&#34; </wildcardwincmdline>
+        <wildcardgroovyscript></wildcardgroovyscript>
+        <wildcardschedule>15</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>false</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group></group>
+        <tags>container,application,docker</tags>
+        <technology></technology>
+        <adlist><![CDATA[{"agdmethod":"none","method":"ad_http","agdparams":"","id":0,"filters":[],"params":{"regex":"aliases\":.\"(.*?)\"","caseSensitive":"no","followRedirect":"no","ports":"","ssl":"no","uri":"http://##HOSTNAME##:8080/api/v2.0/spec?type=docker&recursive=true"}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+        <dataSourceType>1</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>ip</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>port</name>
+            <value>8080</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>followRedirect</name>
+            <value>false</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>connectTimeout</name>
+            <value>0</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>readTimeout</name>
+            <value>0</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>request</name>
+            <value>GET /api/v2.0/stats/##WILDVALUE##?type=docker&#38;count=1 HTTP/1.0
+Connection: close</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>ssl</name>
+            <value>N</value>
+            <comment></comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>cpu_usage_system_raw</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>$.*.*.cpu.usage.system</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cpu time spent in kernel space in nanocores per second</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>cpu_usage_total_raw</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>$.*.*.cpu.usage.total</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>total cpu time in nanocores per second</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>cpu_usage_user_raw</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>$.*.*.cpu.usage.user</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cpu time spent in user space in nanocores per second</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>diskio_bytes_read</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.diskio.io_service_bytes.[*].stats.Read)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>disk bytes read</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>diskio_bytes_written</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.diskio.io_service_bytes.[*].stats.Write)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>disk bytes written</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>diskio_service_reads</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.diskio.io_serviced.[*].stats.Read)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>number of read iops</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>diskio_service_writes</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.diskio.io_serviced.[*].stats.Write)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>number of write iops</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>memory_usage</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>$.*.*.memory.usage</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>current memory usage in bytes</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>memory_working_set</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>$.*.*.memory.working_set</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>current memory working set in bytes</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>net_rx_bytes</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.network.interfaces[*].rx_bytes)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cumulative count of bytes received</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>net_rx_drops</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.network.interfaces[*].rx_dropped)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cumulative count of packets dropped while receiving</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>net_rx_errors</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.network.interfaces[*].rx_errors)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cumulative count of receive errors</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>net_rx_packets</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.network.interfaces[*].rx_packets)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cumulative count of packets received</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>net_tx_bytes</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.network.interfaces[*].tx_bytes)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cumulative count of bytes transmitted</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>net_tx_drops</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.network.interfaces[*].tx_dropped)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cumulative count of packets dropped while transmitting</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>net_tx_errors</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.network.interfaces[*].tx_errors)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cumulative count of transmit errors</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>net_tx_packets</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>sum($.*.*.network.interfaces[*].tx_packets)</postprocessorparam>
+            <usevalue>body</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>cumulative count of packets transmitted</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>status</name>
+            <dataType>2</dataType>
+            <type>5</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue>status</usevalue>
+            <alertexpr>!= 1</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>The Docker container &#34;##INSTANCE##&#34; running on ##HOST## is reporting a status code (##VALUE##) indicating that it may not be responsive. Consider investigating whether this container is still running.
+
+This started at ##START##, or ##DURATION## ago.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>response code from docker cAdvisor API request</description>
+            <maxvalue>6</maxvalue>
+            <minvalue>1</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>cpu_percent_kernel</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>cpu_usage_system_raw/10000000</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Kernel use of one core&#39;s cpu. May exceed 100% in multi-core systems.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>cpu_percent_total</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>cpu_usage_total_raw/10000000</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Total CPU usage of one core&#39;s cpu. May exceed 100% in multi-core systems.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>cpu_percent_userspace</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>cpu_usage_user_raw/10000000</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>User-space use one core&#39;s cpu. May exceed 100% in multi-core systems.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>restart_status</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>groovy</postprocessormethod>
+            <postprocessorparam>import com.jcraft.jsch.JSch
+import com.santaba.agent.util.Settings
+import groovy.json.JsonSlurper
+
+host = hostProps.get(&#34;system.hostname&#34;)
+user = hostProps.get(&#34;docker.user&#34;)
+pass = hostProps.get(&#34;docker.pass&#34;)
+port = hostProps.get(&#34;ssh.port&#34;) ?: 22
+cert = hostProps.get(&#34;ssh.cert&#34;) ?: &#39;~/.ssh/id_rsa&#39;
+timeout = 15000 // timeout in milliseconds
+wildalias = instanceProps.get(&#34;wildalias&#34;)
+
+if(status != 1) {
+
+    status_output = getCommandOutput(&#39;docker ps --all --filter name=&#39; + wildalias + &#34; --format=&#39;{{json .}}&#39; \n&#34;)
+    status_json = new JsonSlurper().parseText(status_output)
+    
+    if (status_json.Status.contains(&#34;Up&#34;) ) { 
+        
+        return 1 //Our container has already restarted, we can leave it alone
+        
+    } else {
+        
+        start_command = getCommandOutput(&#39;docker start &#39; + wildalias)
+        sleep(3000)
+        status_output = getCommandOutput(&#39;docker ps --all --filter name=&#39; + wildalias + &#34; --format=&#39;{{json .}}&#39; \n&#34;)
+        status_json = new JsonSlurper().parseText(status_output)
+    
+        if (status_json.Status.contains(&#34;Up&#34;) ) { 
+            
+            return 2 //Our container has successfully restarted
+            
+        } else {
+            
+            return 0
+        }
+    }
+} else {
+    
+    return 1 //Under normal circumstances, our status is 1
+    
+}
+
+def getCommandOutput(String input_command) {
+    try {
+        // instantiate JSCH object.
+        jsch = new JSch()
+        // do we have an user and no pass ?
+        if (user &#38;&#38; !pass) {
+            // Yes, so lets try connecting via cert.
+            jsch.addIdentity(cert)
+        }
+        // create session.
+        session = jsch.getSession(user, host, port)
+        // given we are running non-interactively, we will automatically accept new host keys.
+        session.setConfig(&#34;StrictHostKeyChecking&#34;, &#34;no&#34;);
+        String authMethod = Settings.getSetting(Settings.SSH_PREFEREDAUTHENTICATION, Settings.DEFAULT_SSH_PREFEREDAUTHENTICATION);
+        session.setConfig(&#34;PreferredAuthentications&#34;, authMethod);
+        // set session timeout, in milliseconds.
+        session.setTimeout(timeout)
+        // is host configured with a user &#38; password?
+        if (pass) {
+            // set password.
+            session.setPassword(pass);
+        }
+        // connect
+        session.connect()
+        // execute command.
+        channel = session.openChannel(&#34;exec&#34;)
+        channel.setCommand(input_command)
+        // collect command output.
+        def commandOutput = channel.getInputStream()
+        channel.connect()
+        def output = commandOutput.text;
+        // disconnect
+        channel.disconnect()
+        return output
+    }
+    catch (Exception e) {
+        e.printStackTrace()
+    }
+    // ensure we disconnect the session.
+    finally {
+        session.disconnect()
+    }
+}</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>1:Running, 2:Container Restarted, 0:Stopped</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        <graph>
+            <name>CPU</name>
+            <title>CPU</title>
+            <verticallabel>% of one core</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>cpu_percent_kernel</name>
+            <datapointname>cpu_percent_kernel</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>cpu_percent_total</name>
+            <datapointname>cpu_percent_total</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>cpu_percent_userspace</name>
+            <datapointname>cpu_percent_userspace</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>total</legend>
+                <color>black</color>
+                <datapointname>cpu_percent_total</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>kernel</legend>
+                <color>blue</color>
+                <datapointname>cpu_percent_kernel</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>user</legend>
+                <color>olive</color>
+                <datapointname>cpu_percent_userspace</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Memory</name>
+            <title>Memory</title>
+            <verticallabel>bytes</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>NaN</minvalue>
+            <displayprio>2</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>memory_usage</name>
+            <datapointname>memory_usage</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>memory_working_set</name>
+            <datapointname>memory_working_set</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>overall usage</legend>
+                <color>aqua</color>
+                <datapointname>memory_usage</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>working set (active)</legend>
+                <color>black</color>
+                <datapointname>memory_working_set</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Network Errors</name>
+            <title>Network Drops/Errors</title>
+            <verticallabel>packets/sec</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>7</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>net_rx_drops</name>
+            <datapointname>net_rx_drops</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>net_rx_errors</name>
+            <datapointname>net_rx_errors</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>net_tx_drops</name>
+            <datapointname>net_tx_drops</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>net_tx_errors</name>
+            <datapointname>net_tx_errors</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Inbound Drops</legend>
+                <color>blue</color>
+                <datapointname>net_rx_drops</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>Inbound Errors</legend>
+                <color>navy</color>
+                <datapointname>net_rx_errors</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>Outbound Drops</legend>
+                <color>orange</color>
+                <datapointname>net_tx_drops</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>Outbound Errors</legend>
+                <color>red</color>
+                <datapointname>net_tx_errors</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Network Packets</name>
+            <title>Network Packets</title>
+            <verticallabel>packets/sec</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>6</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>rx_packets</name>
+            <datapointname>net_rx_packets</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>tx_packets</name>
+            <datapointname>net_tx_packets</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Inbound</legend>
+                <color>blue</color>
+                <datapointname>rx_packets</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>Outbound</legend>
+                <color>green</color>
+                <datapointname>tx_packets</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Network Throughput</name>
+            <title>Network Throughput</title>
+            <verticallabel>bps</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>5</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>rx_bytes</name>
+            <datapointname>net_rx_bytes</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>tx_bytes</name>
+            <datapointname>net_tx_bytes</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+        <graphvirtualdatapoint>
+            <name>rx_bits</name>
+            <rpn>rx_bytes * 8</rpn>
+        </graphvirtualdatapoint>
+        <graphvirtualdatapoint>
+            <name>tx_bits</name>
+            <rpn>tx_bytes * 8</rpn>
+        </graphvirtualdatapoint>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Inbound</legend>
+                <color>blue</color>
+                <datapointname>rx_bytes</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>Outbound</legend>
+                <color>green</color>
+                <datapointname>tx_bytes</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Restart Status</name>
+            <title>Restart Status</title>
+            <verticallabel>0:Stopped, 1:Running, 2:Restarted</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>3.0</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>100</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>restart_status</name>
+            <datapointname>restart_status</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>Restart Status</legend>
+                <color>olive</color>
+                <datapointname>restart_status</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Storage IOPS</name>
+            <title>Storage IOPS</title>
+            <verticallabel>operations/sec</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>3</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>reads</name>
+            <datapointname>diskio_service_reads</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>writes</name>
+            <datapointname>diskio_service_writes</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>3</type>
+                <legend>Reads</legend>
+                <color>orange</color>
+                <datapointname>reads</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Writes</legend>
+                <color>purple</color>
+                <datapointname>writes</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Storage Throughput</name>
+            <title>Storage Throughput</title>
+            <verticallabel>bytes/sec</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>4</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>reads</name>
+            <datapointname>diskio_bytes_read</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>writes</name>
+            <datapointname>diskio_bytes_written</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>3</type>
+                <legend>Reads</legend>
+                <color>orange</color>
+                <datapointname>reads</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Writes</legend>
+                <color>purple</color>
+                <datapointname>writes</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        </graphs>
+        <overviewgraphs>
+        <overviewgraph>
+            <name>Top Containers by CPU</name>
+            <title>Top Containers by CPU</title>
+            <verticallabel>%</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <aggregated>false</aggregated>
+            <datapoints>
+        <overviewgraphdatapoint>
+            <name>cpu_percent_total</name>
+            <datapointname>cpu_percent_total</datapointname>
+            <cf>1</cf>
+            <aggregateMethod>average</aggregateMethod>
+        </overviewgraphdatapoint>
+            </datapoints>
+            <virtualdatapoints>
+            </virtualdatapoints>
+            <lines>
+            <overviewgraphline>
+                <type>1</type>
+                <legend>##INSTANCE##</legend>
+                <datapointname>cpu_percent_total</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+                <color>blue</color>
+            </overviewgraphline>
+            </lines>
+        </overviewgraph>
+        <overviewgraph>
+            <name>Top Containers by Disk Throughput</name>
+            <title>Top Containers by Disk Throughput</title>
+            <verticallabel>bytes/sec</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>3</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <aggregated>false</aggregated>
+            <datapoints>
+        <overviewgraphdatapoint>
+            <name>reads</name>
+            <datapointname>diskio_bytes_read</datapointname>
+            <cf>1</cf>
+            <aggregateMethod>average</aggregateMethod>
+        </overviewgraphdatapoint>
+        <overviewgraphdatapoint>
+            <name>writes</name>
+            <datapointname>diskio_bytes_written</datapointname>
+            <cf>1</cf>
+            <aggregateMethod>average</aggregateMethod>
+        </overviewgraphdatapoint>
+            </datapoints>
+            <virtualdatapoints>
+        <overviewgraphvirtualdatapoint>
+            <name>total</name>
+            <rpn>reads+writes</rpn>
+        </overviewgraphvirtualdatapoint>
+            </virtualdatapoints>
+            <lines>
+            <overviewgraphline>
+                <type>1</type>
+                <legend>##INSTANCE##</legend>
+                <datapointname>total</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+                <color>blue</color>
+            </overviewgraphline>
+            </lines>
+        </overviewgraph>
+        <overviewgraph>
+            <name>Top Containers by Memory Use</name>
+            <title>Top Containers by Memory Use</title>
+            <verticallabel>bytes</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>2</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <aggregated>false</aggregated>
+            <datapoints>
+        <overviewgraphdatapoint>
+            <name>memory_usage</name>
+            <datapointname>memory_usage</datapointname>
+            <cf>1</cf>
+            <aggregateMethod>average</aggregateMethod>
+        </overviewgraphdatapoint>
+            </datapoints>
+            <virtualdatapoints>
+            </virtualdatapoints>
+            <lines>
+            <overviewgraphline>
+                <type>1</type>
+                <legend>##INSTANCE##</legend>
+                <datapointname>memory_usage</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+                <color>blue</color>
+            </overviewgraphline>
+            </lines>
+        </overviewgraph>
+        <overviewgraph>
+            <name>Top Containers by Network Throughput</name>
+            <title>Top Containers by Network Throughput</title>
+            <verticallabel>bps</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>4</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <aggregated>false</aggregated>
+            <datapoints>
+        <overviewgraphdatapoint>
+            <name>rx_bytes</name>
+            <datapointname>net_rx_bytes</datapointname>
+            <cf>1</cf>
+            <aggregateMethod>average</aggregateMethod>
+        </overviewgraphdatapoint>
+        <overviewgraphdatapoint>
+            <name>tx_bytes</name>
+            <datapointname>net_tx_bytes</datapointname>
+            <cf>1</cf>
+            <aggregateMethod>average</aggregateMethod>
+        </overviewgraphdatapoint>
+            </datapoints>
+            <virtualdatapoints>
+        <overviewgraphvirtualdatapoint>
+            <name>total_bits</name>
+            <rpn>(rx_bytes + tx_bytes) * 8</rpn>
+        </overviewgraphvirtualdatapoint>
+            </virtualdatapoints>
+            <lines>
+            <overviewgraphline>
+                <type>1</type>
+                <legend>##INSTANCE##</legend>
+                <datapointname>total_bits</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+                <color>blue</color>
+            </overviewgraphline>
+            </lines>
+        </overviewgraph>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>

@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1576529583</version>
+        <name>LinuxNewProcesses-</name>
+        <displayedas>Monitored Processes</displayedas>
+        <description>Provide total CPU and Memory metrics for a given process type.</description>
+        <collector>script</collector>
+        <hasMultiInstances>true</hasMultiInstances>
+        <schedule>60</schedule>
+        <appliesTo>hascategory(&#34;Netsnmp&#34;)</appliesTo>
+        <wildcardauto>false</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript></wildcardlinuxscript>
+        <wildcardlinuxcmdline></wildcardlinuxcmdline>
+        <wildcardwinscript></wildcardwinscript>
+        <wildcardwincmdline></wildcardwincmdline>
+        <wildcardgroovyscript></wildcardgroovyscript>
+        <wildcardschedule>1440</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>false</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group></group>
+        <tags>process,os,linux</tags>
+        <technology>This datasource has a non-standard way of adding instances. Please see https://www.logicmonitor.com/support/devices/device-datasources-instances/monitoring-web-pages-processes-services-and-unc-paths/</technology>
+        <adlist><![CDATA[{"agdmethod":"none","agdparams":"","id":0,"filters":[],"params":{}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+        <dataSourceType>1</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>scripttype</name>
+            <value>embed</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>scriptgroovy</name>
+            <value>import com.santaba.agent.groovyapi.snmp.Snmp
+
+/*
+    LinuxProcessMonitor - Encapsulates fetching process metrics
+
+    Why different strategies?
+        Depending on the number of processes to be collected it may not make sense to do a Snmp.get call for every
+        process. By the time we get to the end of the list of detected processes some of these will have exited and
+        that will introduce error. In cases where there are many processes (more than 10?) it will be more efficient to
+        just walk the metrics we want and stitch the data together on the script. This script will do both depending on
+        the number of detected processes.
+
+    Why error management?
+        The processes running on the probed host change as the script progresses. If we don&#39;t catch those failures
+        collection will fail because a process exited during script execution. This is normal, especially with high
+        frequency short lived processes (like web servers).
+
+    Why correction?
+        Since this datasource reports metrics across a group and processes, doing error management will introduce error
+        into the collected data as the script progresses by scaling the results to the known total of processes at the
+        start of the script we mitigate that inconsistency and minimize error.
+
+ */
+
+class LinuxProcessMonitor {
+
+    //for the process name
+    static String OID_NAME = &#34;.1.3.6.1.2.1.25.4.2.1.4&#34;;
+    static String OID_PARAM = &#34;.1.3.6.1.2.1.25.4.2.1.5&#34;;
+
+    //for cpu
+    static String OID_CPU = &#34;.1.3.6.1.2.1.25.5.1.1.1.&#34;;
+    //for memory
+    static String OID_MEMORY = &#34;.1.3.6.1.2.1.25.5.1.1.2.&#34;;
+    //for status
+    static String OID_STATUS = &#34;.1.3.6.1.2.1.25.4.2.1.7.&#34;;
+
+    // Do a bulk walk of all of the metrics, the filter out the data
+    static bulkMonitor(String hostname, List&#60;String&#62; pids, String oid) {
+
+        def retVal = [];
+
+        def bulkData = Snmp.walkAsMap(hostname, oid, [:], 20000);
+
+        pids.each {
+          pid -&#62; 
+			retVal &#60;&#60; bulkData.get(pid)
+        }
+
+        return retVal
+    }
+
+    // Do a get for every individual process at a given OID
+    static individualMonitor(String hostname, List&#60;String&#62; pids, String oid) {
+        def retVal = [];
+
+        pids.each {
+            pid -&#62;
+                try {
+                    retVal &#60;&#60; Snmp.get(hostname, oid + pid)
+                }
+                catch (Exception e) {
+                    retVal &#60;&#60; null
+                }
+        }
+		return retVal
+    }
+	
+    static run(String hostname, String processName, out)
+    {
+        def startTime = new Date().getTime()
+		def processArg = processName.tokenize( &#34;||&#34;)
+		def processParam = &#34;&#34;
+		def processPath = processArg[0]
+		
+		if(processArg.size() == 2) {
+			processParam = processArg[1] 
+		}
+		
+        // Get all of the data at the same time to minimize
+        def processPaths = Snmp.walkAsMap(hostname, OID_NAME, [:], 20000)
+        def processParams = Snmp.walkAsMap(hostname, OID_PARAM, [:], 20000)
+
+        List&#60;String&#62; cpuValues
+        List&#60;String&#62; memValues
+        List&#60;String&#62; statusValues
+
+        List&#60;String&#62; pids = [];
+
+        processPaths.each {
+            pid, name -&#62;
+                if((name == processPath) &#38;&#38; (processParams[pid] == processParam)) {
+                    pids &#60;&#60; pid
+                }
+        }
+
+        if(pids.size() &#60; 25) {
+            cpuValues = individualMonitor(hostname, pids, OID_CPU)
+            memValues = individualMonitor(hostname, pids, OID_MEMORY)
+            statusValues = individualMonitor(hostname, pids, OID_STATUS)
+        }
+        else {
+            cpuValues = bulkMonitor(hostname, pids, OID_CPU)
+            memValues = bulkMonitor(hostname, pids, OID_MEMORY)
+            statusValues = bulkMonitor(hostname, pids, OID_STATUS)
+        }
+		
+        def endTime = new Date().getTime()
+
+        out.println &#34;cpu:&#34; + correctedTotal(cpuValues);
+        out.println &#34;memory:&#34; + correctedTotal(memValues);
+        out.println &#34;Processes:&#34; + cpuValues.size()
+        out.println &#34;status:&#34; + min(statusValues,10);
+
+
+        // DEBUGGING METRICS
+        out.println &#34;AllProcesses:&#34; + processPaths.size()
+        out.println &#34;Saturation:&#34; + pids.size() / processPaths.size()
+        out.println &#34;TimeTaken:&#34; + (endTime - startTime)
+
+		return 0;
+    }
+
+    static correctedTotal(List&#60;String&#62; values) {
+
+        if(values.size() == 0) return 0;
+
+        int attempts = 0;
+        int success = 0;
+        double total = 0;
+
+        values.each{
+            v-&#62;
+                attempts += 1;
+                if(v != null) {
+                    total += v.toInteger();
+                    success += 1;
+                }
+        }
+
+        double scalingFactor = success / attempts
+        return total * scalingFactor
+    }
+
+    static min(List&#60;String&#62; values, int startingValue) {
+        def m = startingValue;
+        values.each {
+            v-&#62;
+                if(v != null) {
+                    m = Math.min(v.toInteger(), m)
+                }
+        }
+        return m
+    }
+}
+
+def wildvalue = instanceProps.get(&#34;wildvalue&#34;);
+LinuxProcessMonitor.run(hostProps.get(&#34;system.hostname&#34;), wildvalue, out);</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowsscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowscmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxcmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>CPU</name>
+            <dataType>7</dataType>
+            <type>3</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>cpu</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>5</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>MatchingProcesses</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>Processes</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>The count of the processes which match the path and parameter</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>5</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Memory</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>memory</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>5</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Status</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>status</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr>&#62; 2 2</alertexpr>
+            <alertmissing>3</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>5</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Restart_Linux_Daemon</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>groovy</postprocessormethod>
+            <postprocessorparam>import com.jcraft.jsch.JSch
+
+host = hostProps.get(&#34;system.hostname&#34;)
+user = hostProps.get(&#34;ssh.user&#34;)
+pass = hostProps.get(&#34;ssh.pass&#34;)
+port = hostProps.get(&#34;ssh.port&#34;) ?: 22
+cert = hostProps.get(&#34;ssh.cert&#34;) ?: &#39;~/.ssh/id_rsa&#39;
+wildalias = instanceProps.get(&#34;wildalias&#34;)
+status = (OUTPUT =~ /(status:(\d+))/ )[0][-1].toInteger()
+
+service_name = wildalias.split(&#34;/&#34;)[-1]
+// return service_name
+
+if(status == 1 || status == 2 || status == 3) {
+    
+    return 0
+    
+} else {
+    try
+    {
+        check_status = &#39;sudo service &#39; + service_name + &#39; status&#39;
+    
+        // save command output and split on newlines .
+        status_output = getCommandOutput(check_status)
+        
+        String status_output = status_output.readLines()     
+    
+        if (!status_output.contains(&#34;running&#34;)) {
+            
+            start_service_cmd = &#39;sudo service &#39; + service_name + &#39; start&#39;
+            
+            start_service_output = getCommandOutput(start_service_cmd)
+            
+            String start_output = start_service_output.readLines()
+            
+            sleep(3000)
+            
+            recheck_status = getCommandOutput(check_status)
+            
+            String recheck_output = recheck_status.readLines()
+            
+            if (recheck_output.contains(&#34;running&#34;)) {
+                
+                return 1 //Our restart was successful!
+                
+            } else {
+                
+                return 2 //Our restart was unsuccessful
+            }
+        }
+    }
+    catch (Exception e)
+    {
+        println &#34;Unexpected Exception : &#34; + e
+        return 3 //Failed to execute the restart script
+    }
+}
+
+def getCommandOutput(String input_command)
+{
+    try {
+        // instantiate JSCH object.
+        jsch = new JSch()
+        // do we have an user and no pass ?
+        if (user &#38;&#38; !pass) {
+            // Yes, so lets try connecting via cert.
+            jsch.addIdentity(cert)
+        }
+        // create session.
+        session = jsch.getSession(user, host, port)
+        // given we are running non-interactively, we will automatically accept new host keys.
+        session.setConfig(&#34;StrictHostKeyChecking&#34;, &#34;no&#34;);
+        // is host configured with a user &#38; password?
+        if (pass) {
+            // set password.
+            session.setPassword(pass);
+        }
+        // connect
+        session.connect()
+        // execute command.
+        channel = session.openChannel(&#34;exec&#34;)
+        channel.setCommand(input_command)
+        // collect command output.
+        def commandOutput = channel.getInputStream()
+        channel.connect()
+        def output = commandOutput.text;
+        // disconnect
+        channel.disconnect()
+        return output
+    } catch (Exception e) {
+        e.printStackTrace()
+    }
+    // ensure we disconnect the session.
+    finally {
+        session.disconnect()
+    }
+}</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        <graph>
+            <name>CPU time of process</name>
+            <title>CPU time of process</title>
+            <verticallabel>milliseconds of CPU time/second</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>CPU</name>
+            <datapointname>CPU</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+        <graphvirtualdatapoint>
+            <name>MillisecCPU</name>
+            <rpn>CPU*10</rpn>
+        </graphvirtualdatapoint>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>CPU</legend>
+                <color>blue</color>
+                <datapointname>MillisecCPU</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>MatchingProcesses</name>
+            <title>MatchingProcesses</title>
+            <verticallabel>count</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>MatchingProcesses</name>
+            <datapointname>MatchingProcesses</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>MatchingProcesses</legend>
+                <color>blue</color>
+                <datapointname>MatchingProcesses</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Memory</name>
+            <title>Memory</title>
+            <verticallabel>MB</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Memory</name>
+            <datapointname>Memory</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+        <graphvirtualdatapoint>
+            <name>MemoryBytes</name>
+            <rpn>Memory/1024</rpn>
+        </graphvirtualdatapoint>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Memory</legend>
+                <color>blue</color>
+                <datapointname>MemoryBytes</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Process State</name>
+            <title>Process State</title>
+            <verticallabel>State</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Status</name>
+            <datapointname>Status</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Status: 1 = running; 2 = runnable; 3= not Runnable; 4= invalid</legend>
+                <color>blue</color>
+                <datapointname>Status</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        </graphs>
+        <overviewgraphs>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>

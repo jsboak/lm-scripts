@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1576860604</version>
+        <name>WinOS with PATCH Top Processes</name>
+        <displayedas>Memory and Processes and Top Memory Consumers</displayedas>
+        <description>Windows OS statistics via WMI</description>
+        <collector>wmi</collector>
+        <hasMultiInstances>false</hasMultiInstances>
+        <schedule>120</schedule>
+        <appliesTo>/*
+system.displayname == &#34;se-la3-manage1&#34;
+*/</appliesTo>
+        <wildcardauto>false</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript></wildcardlinuxscript>
+        <wildcardlinuxcmdline></wildcardlinuxcmdline>
+        <wildcardwinscript></wildcardwinscript>
+        <wildcardwincmdline></wildcardwincmdline>
+        <wildcardgroovyscript></wildcardgroovyscript>
+        <wildcardschedule>1440</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>false</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group></group>
+        <tags>processes,memory,os,paging,windows,ram</tags>
+        <technology></technology>
+        <adlist><![CDATA[{"agdmethod":"none","agdparams":"","id":0,"filters":[],"params":{}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+        <dataSourceType>1</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>ip</name>
+            <value>dns</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>wmiNamespace</name>
+            <value>CIMV2</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>type</name>
+            <value>query</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryClass</name>
+            <value>Win32_OperatingSystem</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryIndex</name>
+            <value>@</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryValue</name>
+            <value>@</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>methodName</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>targetPath</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>methodInputs</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>FreePhysicalMemory</name>
+            <dataType>5</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Number of kilobytes of physical memory currently unused and available.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>FreePhysicalMemory</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>4</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>FreeSpaceInPagingFiles</name>
+            <dataType>5</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Number of kilobytes that can be mapped into the operating system&#39;s paging files without causing other pages to be swapped out.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>FreeSpaceInPagingFiles</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>4</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>FreeVirtualMemory</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Number, in kilobytes, of virtual memory currently unused and available</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>FreeVirtualMemory</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>5</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>NumberOfProcesses</name>
+            <dataType>3</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Number of process contexts currently loaded or running on the operating system.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>NumberOfProcesses</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>4</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>SizeStoredInPagingFiles</name>
+            <dataType>5</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Number of kilobytes that can be stored in the operating system&#39;s paging files.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>SizeStoredInPagingFiles</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>4</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>TotalVirtualMemorySize</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Number, in kilobytes, of virtual memory. For example, this may be calculated by adding the amount of total RAM to the amount of paging space</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>TotalVirtualMemorySize</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>5</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>TotalVisibleMemorySize</name>
+            <dataType>5</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Total amount of physical memory, in kilobytes, available to the operating system.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>TotalVisibleMemorySize</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>4</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>MemoryUtilizationPercent</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>((TotalVisibleMemorySize-FreePhysicalMemory)/TotalVisibleMemorySize)*100</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>&#62; 50</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>Physical memory on ##HOST## is now ##VALUE## % in use placing your device in ##LEVEL## state.
+
+This started at ##START##, -- or ##DURATION## ago.
+
+Top Memory Consuming Processes: ##top_memory_processes##
+
+This may indicate a memory shortage, that will increase paging rates to/from disk.  However, it may also indicate applications (such as SQL Server) that claim a lot of physical memory for caching purposes.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>Percentage of used physical memory</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>1</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>PercentVirtualMemoryInUse</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>(1-(FreeVirtualMemory)/(TotalVirtualMemorySize))*100</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>&#62; 90</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>Total virtual memory usage (i.e. combined physical memory and paging files) is now over 90%. This is likely to impact system performance. Check to see which processes are consuming too much memory, or add additional memory or paging files.
+Note that system managed paging files should grow if over 90% utilization - if they are not, they may not have sufficient disk space.
+This ##LEVEL## started at ##START## - or ##DURATION## ago on Hostname:##HOSTNAME## the Virtual Memory in use is ##VALUE## %</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>percent of system commit limit (physical memory plus paging files) in use by system commit charge (memory in use in physical mem and paging files.)
+Indication of total virtual memory usage.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>5</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Post_Top_Memory_Consumers</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>groovy</postprocessormethod>
+            <postprocessorparam>import org.apache.http.HttpEntity
+import org.apache.http.client.methods.CloseableHttpResponse
+import org.apache.http.client.methods.HttpPatch
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClients
+import org.apache.http.util.EntityUtils
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Hex;
+import groovy.json.*;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+
+TotalVisibleMemorySize = output[&#39;TOTALVISIBLEMEMORYSIZE&#39;].toFloat()
+FreePhysicalMemory = output[&#39;FREEPHYSICALMEMORY&#39;].toFloat()
+
+MemUtilizationPercent = ((TotalVisibleMemorySize-FreePhysicalMemory)/TotalVisibleMemorySize)*100
+
+def host_id = hostProps.get(&#34;system.deviceId&#34;)
+def hostname = hostProps.get(&#34;system.sysname&#34;)
+String[] command = [&#34;powershell&#34;,
+                    &#34;-Command&#34;,
+                    &#34;Invoke-Command -Session (New-PSSession -ComputerName ${hostname}) -ScriptBlock {ps | sort -des WS | select ProcessName -f 10 | ft -a; sleep 1; cls}&#34;
+                    ];
+
+if( MemUtilizationPercent &#62; 56 ) { 
+    
+    Process process = new ProcessBuilder(command).start();
+    process.waitFor()
+    InputStream inputStream = process.getInputStream();
+    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+    
+    String output = bufferedReader.readLines().toString()
+    
+    processes = (output =~ /(\w+)/)
+    
+    process_list = []
+    
+    processes.each {
+        
+        if(it[0] != &#34;ProcessName&#34;) {
+            process_list.add( it[0] )
+        }
+    }
+    
+    Runtime rt = Runtime.getRuntime();
+    Process proc = rt.exec(&#34;taskkill /F /IM powershell.exe&#34;);
+    Process proc2 = rt.exec(&#34;taskkill /F /IM cmd.exe&#34;);
+    
+    patch_request = lm_put_request(
+        &#34;/device/devices/${host_id}&#34;,
+        &#34;?v=2&#38;patchFields=customProperties&#38;opType=add&#34;,
+        &#39;{&#34;customProperties&#34;:[{&#34;name&#34;:&#34;top_memory_processes&#34;,&#34;value&#34;:&#34;&#39; + process_list + &#39;&#34;}]}&#39;
+        )
+        
+    if (patch_request[1] == 200) {
+        
+        return 200
+        
+    } else {
+        
+        return 400
+        
+    }
+} else {
+    
+    return 600
+    
+}
+    
+def lm_put_request(resourcePath,queryParams,data) {
+    
+    accessId = hostProps.get(&#39;lmaccessid.key&#39;); //This is your LM API Access ID
+    accessKey = hostProps.get(&#39;lmaccesskey.key&#39;); //This is your LM API Access Key
+    account = &#39;&#39;;
+
+    File file = new File(&#39;../conf/agent.conf&#39;);
+    file.text.eachLine
+    {
+            if (it =~ /company=/)
+            {
+                    account = it.split(&#39;=&#39;)[1].trim();
+            }
+    }
+    
+    CloseableHttpClient httpclient = HttpClients.createDefault();
+    epoch = System.currentTimeMillis();
+    
+    httpVerb = &#39;PATCH&#39;
+    url = &#34;https://&#34; + account + &#34;.logicmonitor.com&#34; + &#34;/santaba/rest&#34; + resourcePath + queryParams;
+    StringEntity params = new StringEntity(data,ContentType.APPLICATION_JSON);
+    
+    //calculate signature
+    requestVars = httpVerb + epoch + data + resourcePath;
+    
+    hmac = Mac.getInstance(&#39;HmacSHA256&#39;);
+    secret = new SecretKeySpec(accessKey.getBytes(), &#39;HmacSHA256&#39;);
+    hmac.init(secret);
+    hmac_signed = Hex.encodeHexString(hmac.doFinal(requestVars.getBytes()));
+    signature = hmac_signed.bytes.encodeBase64();
+    
+    // Execute the POST = putting seconary devices into SDT
+    httpPost = new HttpPatch(url);
+    httpPost.addHeader(&#39;Authorization&#39; , &#39;LMv1 &#39; + accessId + &#39;:&#39; + signature + &#39;:&#39; + epoch);
+    httpPost.setHeader(&#34;Accept&#34;, &#34;application/json&#34;);
+    httpPost.setHeader(&#34;Content-type&#34;, &#34;application/json&#34;);
+    httpPost.setEntity(params);
+    response = httpclient.execute(httpPost);
+    responseBody = EntityUtils.toString(response.getEntity());
+    code = response.getStatusLine().getStatusCode();
+    allResponse = new JsonSlurper().parseText(responseBody);
+
+    return [allResponse,code]
+
+}
+
+def calcSignature(verb,resourcePath,accessKey,accessId,data) {
+	epoch = System.currentTimeMillis();
+	requestVars = verb + epoch + data + resourcePath;
+	hmac = Mac.getInstance(&#34;HmacSHA256&#34;);
+	secret = new SecretKeySpec(accessKey.getBytes(), &#34;HmacSHA256&#34;);
+	hmac.init(secret);
+	hmac_signed = Hex.encodeHexString(hmac.doFinal(requestVars.getBytes()));
+	signature = hmac_signed.bytes.encodeBase64();
+	headers = [:]
+	headers.put(&#34;Authorization&#34; , &#34;LMv1 &#34; + accessId + &#34;:&#34; + signature + &#34;:&#34; + epoch)
+	return headers;
+}</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        <graph>
+            <name>Memory Utilization Percent</name>
+            <title>Memory Utilization Percent</title>
+            <verticallabel>%</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>MemoryUtilizationPercent</name>
+            <datapointname>MemoryUtilizationPercent</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>3</type>
+                <legend>MemoryUtilizationPercent</legend>
+                <color>silver</color>
+                <datapointname>MemoryUtilizationPercent</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Paging File Memory Usage</name>
+            <title>Paging File Memory Usage</title>
+            <verticallabel>bytes</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>true</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Free</name>
+            <datapointname>FreeSpaceInPagingFiles</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>Total</name>
+            <datapointname>SizeStoredInPagingFiles</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+        <graphvirtualdatapoint>
+            <name>TotalBytes</name>
+            <rpn>Total*1024</rpn>
+        </graphvirtualdatapoint>
+        <graphvirtualdatapoint>
+            <name>UsedBytes</name>
+            <rpn>TotalBytes-(Free*1024)</rpn>
+        </graphvirtualdatapoint>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>TotalBytes</legend>
+                <color>green</color>
+                <datapointname>TotalBytes</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>2</type>
+                <legend>UsedBytes</legend>
+                <color>red</color>
+                <datapointname>UsedBytes</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Physical Memory Usage</name>
+            <title>Physical Memory Usage</title>
+            <verticallabel>bytes</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>true</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Free</name>
+            <datapointname>FreePhysicalMemory</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>Total</name>
+            <datapointname>TotalVisibleMemorySize</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+        <graphvirtualdatapoint>
+            <name>TotalBytes</name>
+            <rpn>Total*1024</rpn>
+        </graphvirtualdatapoint>
+        <graphvirtualdatapoint>
+            <name>UsedBytes</name>
+            <rpn>TotalBytes-(Free*1024)</rpn>
+        </graphvirtualdatapoint>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>TotalBytes</legend>
+                <color>green</color>
+                <datapointname>TotalBytes</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>2</type>
+                <legend>UsedBytes</legend>
+                <color>red</color>
+                <datapointname>UsedBytes</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Total Processes</name>
+            <title>Total Processes</title>
+            <verticallabel>count</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>NumberOfProcesses</name>
+            <datapointname>NumberOfProcesses</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Processes</legend>
+                <color>blue</color>
+                <datapointname>NumberOfProcesses</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Total Virtual Memory Usage</name>
+            <title>Total Virtual Memory Usage</title>
+            <verticallabel>%</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>PercentVirtualMemoryInUse</name>
+            <datapointname>PercentVirtualMemoryInUse</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Virtual Memory In Use</legend>
+                <color>blue</color>
+                <datapointname>PercentVirtualMemoryInUse</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        </graphs>
+        <overviewgraphs>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>
