@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1576780980</version>
+        <name>WinVolumeUsage_with_cCleaner</name>
+        <displayedas>Volume Capacity with cCleaner</displayedas>
+        <description>tracks storage capacity utilization and detail</description>
+        <collector>wmi</collector>
+        <hasMultiInstances>true</hasMultiInstances>
+        <schedule>300</schedule>
+        <appliesTo>system.displayname =~ &#34;manage1&#34;</appliesTo>
+        <wildcardauto>true</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript>ad_wmi</wildcardlinuxscript>
+        <wildcardlinuxcmdline> class=&#34;Win32_Volume&#34; property=&#34;name&#34;  namespace=&#34;cimv2&#34;  </wildcardlinuxcmdline>
+        <wildcardwinscript>ad_wmi</wildcardwinscript>
+        <wildcardwincmdline> class=&#34;Win32_Volume&#34; property=&#34;name&#34;  namespace=&#34;cimv2&#34;  </wildcardwincmdline>
+        <wildcardgroovyscript></wildcardgroovyscript>
+        <wildcardschedule>1440</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>false</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group></group>
+        <tags>volume,os,windows,microsoft</tags>
+        <technology>https://www.ccleaner.com/docs/ccleaner/advanced-usage/command-line-parameters</technology>
+        <adlist><![CDATA[{"agdmethod":"none","method":"ad_wmi","agdparams":"","id":0,"filters":[{"attribute":"DriveType","operation":"Equal","value":"3"},{"attribute":"Capacity","operation":"GreaterThan","value":"0"},{"attribute":"name","operation":"Contain","value":":"}],"params":{"linkedClasses":"[]","ad_param_externalresourceid":"","namespace":"cimv2","property":"name","ILP":"[]","ad_param_externalresourcetype":"","class":"Win32_Volume"}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+        <dataSourceType>1</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>ip</name>
+            <value>dns</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>wmiNamespace</name>
+            <value>CIMV2</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>type</name>
+            <value>query</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryClass</name>
+            <value>Win32_Volume</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryIndex</name>
+            <value>name</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryValue</name>
+            <value>##WILDVALUE##</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>methodName</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>targetPath</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>methodInputs</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>__filter_0</name>
+            <value>DriveType	Equal	3</value>
+            <comment>Local Disk (or block mounted)</comment>
+        </attribute>
+        <attribute>
+            <name>__filter_1</name>
+            <value>Capacity	GreaterThan	0</value>
+            <comment>With a real file system.</comment>
+        </attribute>
+        <attribute>
+            <name>__filter_2</name>
+            <value>name	Contain	:</value>
+            <comment>Only discover drives with mounted file systems.</comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>Capacity</name>
+            <dataType>5</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>overall storage capacity of the volume in bytes</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>Capacity</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>4</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>FreeSpace</name>
+            <dataType>5</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>available storage capacity of the volume in bytes</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>FreeSpace</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>4</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>PercentUsed</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(Capacity-FreeSpace)/Capacity</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>&#62;= 91 95 98</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>The filesystem ##INSTANCE## ##DSIDESCRIPTION## on host ##HOST## is now ##VALUE## percent used, as of ##START##.
+Please free up some space, or adjust the thresholds for this volume.
+This state has existed for ##DURATION##.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>percent storage consumed</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>4</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>run_cCleaner</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>groovy</postprocessormethod>
+            <postprocessorparam>hostname = hostProps.get(&#34;system.sysname&#34;)
+// drive = //instanceProps.get(&#34;wildvalue&#34;)
+capacity = output[&#34;CAPACITY&#34;].toFloat() 
+freespace = output [&#34;FREESPACE&#34;].toFloat()
+percentused = ((capacity - freespace)/capacity)*100
+
+String[] command = [&#34;powershell&#34;,&#34;-Command&#34;,&#34;Invoke-Command -Session (New-PSSession -ComputerName ${hostname}) -ScriptBlock {C:\\ccleaner\\ccleaner64.exe /Auto | Out-Null}&#34;];
+
+if( percentused &#60;= 68 ) {
+    
+    return 1
+    
+} else {
+    
+    try {
+    
+        Process process = new ProcessBuilder(command).start();
+        process.waitFor()
+        InputStream inputStream = process.getInputStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        
+        String output = bufferedReader.readLines() 
+        
+        Runtime rt = Runtime.getRuntime();
+        Process proc = rt.exec(&#34;taskkill /F /IM powershell.exe&#34;);
+        
+        if(output == &#34;[]&#34;) {
+    
+            return 2;
+        
+        }
+    } catch (Exception ex) {
+    
+    println &#34;${ex}&#34;
+    return 3;
+    
+    }
+}</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>&#62; 2 timezone=America/Los_Angeles</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>The filesystem ##INSTANCE## ##DSIDESCRIPTION## on host ##HOST## is now ##VALUE## percent used, as of ##START##.
+Please free up some space, or adjust the thresholds for this volume.
+This state has existed for ##DURATION##.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>calculate percent storage consumed and then run an app to clean up
+
+100*(Capacity-FreeSpace)/Capacity</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>4</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        <graph>
+            <name>Capacity Detail</name>
+            <title>Capacity Detail</title>
+            <verticallabel>GB</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1hour</timescale>
+            <base1024>true</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>FreeSpace</name>
+            <datapointname>FreeSpace</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>Size</name>
+            <datapointname>Capacity</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+        <graphvirtualdatapoint>
+            <name>UsedGB</name>
+            <rpn>(Size-FreeSpace)/1024/1024/1024</rpn>
+        </graphvirtualdatapoint>
+        <graphvirtualdatapoint>
+            <name>SizeGB</name>
+            <rpn>Size/1024/1024/1024</rpn>
+        </graphvirtualdatapoint>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>Capacity</legend>
+                <color>green</color>
+                <datapointname>SizeGB</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>2</type>
+                <legend>Used</legend>
+                <color>red</color>
+                <datapointname>UsedGB</datapointname>
+                <isvirtualdatapoint>true</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        </graphs>
+        <overviewgraphs>
+        <overviewgraph>
+            <name>Capacity Overview</name>
+            <title>Capacity Overview</title>
+            <verticallabel>%</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>100.0</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <aggregated>false</aggregated>
+            <datapoints>
+        <overviewgraphdatapoint>
+            <name>PercentUsed</name>
+            <datapointname>PercentUsed</datapointname>
+            <cf>1</cf>
+            <aggregateMethod>sum</aggregateMethod>
+        </overviewgraphdatapoint>
+            </datapoints>
+            <virtualdatapoints>
+            </virtualdatapoints>
+            <lines>
+            <overviewgraphline>
+                <type>1</type>
+                <legend>##INSTANCE##</legend>
+                <datapointname>PercentUsed</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+                <color>blue</color>
+            </overviewgraphline>
+            </lines>
+        </overviewgraph>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>
