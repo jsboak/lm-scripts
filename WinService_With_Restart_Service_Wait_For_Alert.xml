@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1578964490</version>
+        <name>WinService_With_Restart_Service</name>
+        <displayedas>Services RS</displayedas>
+        <description>Monitors state of Windows Services. Auto-restarts if service is detected down.</description>
+        <collector>wmi</collector>
+        <hasMultiInstances>true</hasMultiInstances>
+        <schedule>120</schedule>
+        <appliesTo>system.displayname == &#34;se-la3-manage1&#34;</appliesTo>
+        <wildcardauto>false</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript></wildcardlinuxscript>
+        <wildcardlinuxcmdline></wildcardlinuxcmdline>
+        <wildcardwinscript></wildcardwinscript>
+        <wildcardwincmdline></wildcardwincmdline>
+        <wildcardgroovyscript></wildcardgroovyscript>
+        <wildcardschedule>1440</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>false</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group></group>
+        <tags>os,windows</tags>
+        <technology>Collector service-account or wmi.user needs permissions to &#34;start&#34; services.</technology>
+        <adlist><![CDATA[{"agdmethod":"none","agdparams":"","id":0,"filters":[],"params":{}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+        <dataSourceType>1</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>ip</name>
+            <value>dns</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>wmiNamespace</name>
+            <value>CIMV2</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>type</name>
+            <value>query</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryClass</name>
+            <value>Win32_Service</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryIndex</name>
+            <value>displayname</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>queryValue</name>
+            <value>##WILDVALUE##</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>methodName</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>targetPath</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>methodInputs</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>State</name>
+            <dataType>1</dataType>
+            <type>2</type>
+            <postprocessormethod>textmatch</postprocessormethod>
+            <postprocessorparam>Running</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>!= 1</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>The Windows service ##INSTANCE## ##DSIDESCRIPTION## on ##HOST## is not running.
+This started at ##START## - or ##DURATION## ago.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>State</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Status</name>
+            <dataType>1</dataType>
+            <type>5</type>
+            <postprocessormethod>textmatch</postprocessormethod>
+            <postprocessorparam>OK</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>Status</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>3</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Restart_Service</name>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>groovy</postprocessormethod>
+            <postprocessorparam>import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Hex;
+import com.santaba.agent.groovyapi.http.*;
+import groovy.json.JsonSlurper;
+
+deviceId = hostProps.get(&#34;system.deviceId&#34;)
+instanceId = instanceProps.get(&#34;system.instanceId&#34;)
+hostname = hostProps.get(&#34;system.ips&#34;).split(&#34;,&#34;)[0]
+status = output[&#34;STATUS&#34;]
+state = output[&#34;STATE&#34;]
+service_name = output[&#34;NAME&#34;]
+dataPointName = &#39;State&#39; //IN THIS EXAMPLE WE&#39;RE FILTERING OUT ALERTS SEARCH TO THE SPECIFIC DATAPOINT. THIS CAN BE REMOVED, OR CHANGED IF NEED BE.
+
+String[] start_service = [&#34;cmd.exe&#34;, &#34;/c&#34;, &#34;sc&#34;, &#34;\\\\${hostname}&#34;, &#34;start&#34;, &#34;${service_name}&#34;];
+String[] check_status = [&#34;cmd.exe&#34;, &#34;/c&#34;, &#34;sc&#34;, &#34;\\\\${hostname}&#34;, &#34;query&#34;, &#34;${service_name}&#34;];
+
+current_alert = lm_get_request(&#34;/device/devices/${deviceId}/alerts&#34;,&#34;?filter=instanceId:${instanceId},dataPointName:${dataPointName}&#34;) //Is there a current alert?
+
+if( (state==&#34;Running&#34; &#38;&#38; status == &#34;OK&#34;) || current_alert.data.total == 0) {
+    
+    return 0 //Service is running properly OR we haven&#39;t triggered an alert yet
+
+} else if( current_alert.data.total != 0) { //An alert has triggered, let&#39;s trigger our automation
+        
+    state = process_builder(check_status)
+    
+    if ( !state.contains(&#34;RUNNING&#34;) ) {
+        
+        service_restart = process_builder(start_service) //Let&#39;s restart the service
+
+        sleep(5000) //Let&#39;s give the service some time to start up
+        
+        recheck_state = process_builder(check_status) //We recheck the service-status to make sure the remediation worked
+        
+        if( recheck_state.contains(&#34;RUNNING&#34;)) {
+            
+            Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec(&#34;taskkill /F /IM cmd.exe&#34;); //Let&#39;s quit the cmd.exe for this operation
+            
+            return 2 //&#34;Remediation executed successfully&#34;
+            
+        } else {
+            
+            return 3 //&#34;Remediation execution failed&#34;
+        }
+    }
+}
+
+def process_builder(command) {
+    Process process = new ProcessBuilder(command).start();
+    InputStream inputStream = process.getInputStream();
+    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+    String output = bufferedReader.readLines();
+    return output
+}
+
+def lm_get_request(resource_path, query_params) {
+    
+    accessId = hostProps.get(&#39;lmaccessid.key&#39;); //This is your LM API Access ID
+    accessKey = hostProps.get(&#39;lmaccesskey.key&#39;); //This is your LM API Access Key
+    account = &#39;&#39;;
+    File file = new File(&#39;../conf/agent.conf&#39;);
+    file.text.eachLine
+    {
+        if (it =~ /company=/)
+        {
+            account = it.split(&#39;=&#39;)[1].trim();
+        }
+    }
+    url = &#34;https://&#34; + account + &#34;.logicmonitor.com&#34; + &#34;/santaba/rest&#34; ;
+    httpClient = HTTP.open(account + &#34;.logicmonitor.com&#34;, 443);
+    //Build the resource-path URL to retrieve stats from the &#34;root&#34; group of the device-tree
+    resourcePath = resource_path
+    queryParams = query_params 
+    headers=calcSignature(&#39;GET&#39;,resourcePath,accessKey,accessId); // calcSignature defined below
+    response = httpClient.get(url + resourcePath + queryParams,headers)
+    responseBody = httpClient.getResponseBody();
+    allResponse = new JsonSlurper().parseText(responseBody);
+    responseCode = httpClient.getStatusCode();
+    if (responseCode == 200) {
+        return allResponse
+    } else {
+        return responseCode
+    };
+}
+
+def lm_post_request(resource_path, query_params, data) {
+    
+    accessId = hostProps.get(&#39;lmaccessid.key&#39;); //This is your LM API Access ID
+    accessKey = hostProps.get(&#39;lmaccesskey.key&#39;); //This is your LM API Access Key
+    account = &#39;&#39;;
+    File file = new File(&#39;../conf/agent.conf&#39;);
+    file.text.eachLine
+    {
+        if (it =~ /company=/)
+        {
+            account = it.split(&#39;=&#39;)[1].trim();
+        }
+    }
+    url = &#34;https://&#34; + account + &#34;.logicmonitor.com&#34; + &#34;/santaba/rest&#34; ;
+    httpClient = HTTP.open(account + &#34;.logicmonitor.com&#34;, 443);
+    //Build the resource-path URL to retrieve stats from the &#34;root&#34; group of the device-tree
+    resourcePath = resource_path
+    queryParams = query_params
+    data = data
+    headers=calcSignature(&#39;POST&#39;,resourcePath,accessKey,accessId,data); // calcSignature defined below
+    response = httpClient.post(url + resourcePath + queryParams,data,headers)
+    responseBody = httpClient.getResponseBody();
+    allResponse = new JsonSlurper().parseText(responseBody);
+    responseCode = httpClient.getStatusCode();
+    if (responseCode == 200) {
+        return allResponse
+    } else {
+        return responseCode
+    };
+}
+
+def calcSignature(verb,resourcePath,accessKey,accessId,data=&#39;&#39;) {
+	epoch = System.currentTimeMillis();
+	requestVars = verb + epoch + data + resourcePath;
+	hmac = Mac.getInstance(&#34;HmacSHA256&#34;);
+	secret = new SecretKeySpec(accessKey.getBytes(), &#34;HmacSHA256&#34;);
+	hmac.init(secret);
+	hmac_signed = Hex.encodeHexString(hmac.doFinal(requestVars.getBytes()));
+	signature = hmac_signed.bytes.encodeBase64();
+	headers = [:]
+	headers.put(&#34;Authorization&#34; , &#34;LMv1 &#34; + accessId + &#34;:&#34; + signature + &#34;:&#34; + epoch)
+	return headers;
+}</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>1=Running, 2=Restarted, 3=Restart-Failed</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>RunningStatus</name>
+            <dataType>1</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>if(eq(State,1),Status,1)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>!= 1</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>The windows service ##INSTANCE## ##DSIDESCRIPTION## on ##HOST## is running, but not in the OK state.
+It may be in error, degraded or starting/stoppingstate.
+This started at ##START## - or ##DURATION## ago.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <description>If service is running, alert if Status is not OK.</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1>RunningStatus</userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>3</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        <graph>
+            <name>Restart Status</name>
+            <title>Restart Status</title>
+            <verticallabel>1=Running, 2=Restarted, 3=Failed Restart</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1hour</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Restart_Service</name>
+            <datapointname>Restart_Service</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Restart Service</legend>
+                <color>silver</color>
+                <datapointname>Restart_Service</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>State</name>
+            <title>State</title>
+            <verticallabel>State</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>5.0</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1hour</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>State</name>
+            <datapointname>State</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>State 1 = Running</legend>
+                <color>blue</color>
+                <datapointname>State</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Status</name>
+            <title>Status</title>
+            <verticallabel>Status</verticallabel>
+            <rigid>true</rigid>
+            <maxvalue>5.0</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1hour</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Status</name>
+            <datapointname>Status</datapointname>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Status 1 = OK</legend>
+                <color>blue</color>
+                <datapointname>Status</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        </graphs>
+        <overviewgraphs>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>
